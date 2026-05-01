@@ -1,0 +1,370 @@
+{
+  "title": "Canadian Policyholder Portal",
+  "product_overview": {
+    "what_is_being_built": "A self-service portal for Canadian auto insurance policyholders to manage their accounts and claims.",
+    "who_it_is_for": "The primary users are Canadian auto insurance policyholders, with a focus on providing an accessible and secure experience.",
+    "value_proposition": "The portal will allow policyholders to easily access their policy details, submit claims, and manage their account information, improving customer satisfaction and reducing operational costs."
+  },
+  "goals_and_success_metrics": {
+    "business_goals": [
+      "Improve customer satisfaction and retention for Canadian auto insurance policyholders",
+      "Reduce call center volume and operational costs by enabling self-service capabilities"
+    ],
+    "user_goals": [
+      "Easily access policy details and download proof-of-insurance documents",
+      "Quickly submit first notice of loss (FNOL) for claims and upload supporting documents",
+      "Manage personal information and account settings securely"
+    ],
+    "kpis": [
+      "Increase in self-service portal utilization rate",
+      "Reduction in call center volume",
+      "Increase in customer satisfaction scores"
+    ]
+  },
+  "scope": {
+    "in_scope": [
+      "User authentication (email/password, optional MFA)",
+      "Policy details (coverage, limits, deductibles)",
+      "Proof-of-insurance document download",
+      "First notice of loss (FNOL) submission",
+      "Document upload (photos, police reports)",
+      "Personal information management (address, phone, driver's license)",
+      "Password reset and self-service account management"
+    ],
+    "out_of_scope": [
+      "Claims processing and adjudication",
+      "Payment processing and billing",
+      "Integrated fraud detection"
+    ]
+  },
+  "users_and_personas": {
+    "primary_users": [
+      "Canadian auto insurance policyholders"
+    ],
+    "secondary_users": [
+      "Customer service representatives (for assisting policyholders)"
+    ]
+  },
+  "product_design_experience": {
+    "application_type": "Responsive web application",
+    "high_level_layout": [
+      "Login/authentication flow",
+      "Policy dashboard with details and documents",
+      "Claims submission and document upload",
+      "Personal information management"
+    ]
+  },
+  "functional_requirements": [
+    {
+      "module_name": "Authentication",
+      "description": "Secure user authentication and account management",
+      "user_actions": [
+        {
+          "user_action": "Sign in with email and password",
+          "system_behavior": "Validate credentials and initiate session"
+        },
+        {
+          "user_action": "Request password reset",
+          "system_behavior": "Send password reset email to registered email address"
+        },
+        {
+          "user_action": "Enable multi-factor authentication",
+          "system_behavior": "Prompt user to set up MFA (e.g., SMS, authenticator app)"
+        }
+      ],
+      "fields": [
+        {
+          "name": "Email",
+          "type": "email",
+          "required": true,
+          "description": "User's registered email address"
+        },
+        {
+          "name": "Password",
+          "type": "password",
+          "required": true,
+          "description": "User's account password"
+        },
+        {
+          "name": "MFA_Method",
+          "type": "string",
+          "required": false,
+          "description": "Multi-factor authentication method (e.g., SMS, authenticator app)"
+        }
+      ],
+      "validations": [
+        "Email must be a valid, registered email address",
+        "Password must meet minimum security requirements (length, complexity)",
+        "MFA method must be a supported, secure option"
+      ]
+    },
+    {
+      "module_name": "Policy Management",
+      "description": "View and manage policyholder's insurance policy details",
+      "user_actions": [
+        {
+          "user_action": "View policy details",
+          "system_behavior": "Display policy coverage, limits, deductibles, and other relevant information"
+        },
+        {
+          "user_action": "Download proof-of-insurance document",
+          "system_behavior": "Generate and provide a PDF version of the policyholder's proof-of-insurance card"
+        }
+      ],
+      "fields": [
+        {
+          "name": "PolicyNumber",
+          "type": "string",
+          "required": true,
+          "description": "Unique identifier for the policyholder's insurance policy"
+        },
+        {
+          "name": "CoverageType",
+          "type": "string",
+          "required": true,
+          "description": "Type of insurance coverage (e.g., auto, home, life)"
+        },
+        {
+          "name": "CoverageLimit",
+          "type": "number",
+          "required": true,
+          "description": "Maximum amount the insurance policy will pay out"
+        },
+        {
+          "name": "Deductible",
+          "type": "number",
+          "required": true,
+          "description": "Amount the policyholder must pay before the insurance coverage begins"
+        }
+      ],
+      "validations": [
+        "PolicyNumber must be a valid, registered policy number",
+        "CoverageType must be a supported insurance product",
+        "CoverageLimit and Deductible must be positive numeric values"
+      ]
+    },
+    {
+      "module_name": "Claims Submission",
+      "description": "Allow policyholders to submit first notice of loss (FNOL) for claims",
+      "user_actions": [
+        {
+          "user_action": "Submit FNOL",
+          "system_behavior": "Capture claim details and provide claim number"
+        },
+        {
+          "user_action": "Upload supporting documents",
+          "system_behavior": "Allow upload of images, PDFs, and other files related to the claim"
+        }
+      ],
+      "fields": [
+        {
+          "name": "ClaimNumber",
+          "type": "string",
+          "required": true,
+          "description": "Unique identifier for the insurance claim"
+        },
+        {
+          "name": "IncidentDate",
+          "type": "date",
+          "required": true,
+          "description": "Date the incident occurred that led to the claim"
+        },
+        {
+          "name": "IncidentLocation",
+          "type": "string",
+          "required": true,
+          "description": "Location where the incident occurred"
+        },
+        {
+          "name": "IncidentDescription",
+          "type": "string",
+          "required": true,
+          "description": "Description of the incident and damages"
+        },
+        {
+          "name": "SupportingDocuments",
+          "type": "file",
+          "required": false,
+          "description": "Files (images, PDFs) related to the claim"
+        }
+      ],
+      "validations": [
+        "ClaimNumber must be a unique, valid claim identifier",
+        "IncidentDate must be a valid date in the past",
+        "IncidentLocation must be a valid address or location",
+        "IncidentDescription must be a non-empty string",
+        "SupportingDocuments must be valid image, PDF, or other supported file types"
+      ]
+    },
+    {
+      "module_name": "Personal Information",
+      "description": "Allow policyholders to manage their personal information",
+      "user_actions": [
+        {
+          "user_action": "Update contact information",
+          "system_behavior": "Allow editing of address, phone number, and other contact details"
+        },
+        {
+          "user_action": "Update driver's license information",
+          "system_behavior": "Allow editing of driver's license number and other related details"
+        }
+      ],
+      "fields": [
+        {
+          "name": "FullName",
+          "type": "string",
+          "required": true,
+          "description": "Policyholder's full legal name"
+        },
+        {
+          "name": "DateOfBirth",
+          "type": "date",
+          "required": true,
+          "description": "Policyholder's date of birth"
+        },
+        {
+          "name": "Address",
+          "type": "string",
+          "required": true,
+          "description": "Policyholder's residential address"
+        },
+        {
+          "name": "PhoneNumber",
+          "type": "string",
+          "required": true,
+          "description": "Policyholder's primary phone number"
+        },
+        {
+          "name": "DriversLicenseNumber",
+          "type": "string",
+          "required": true,
+          "description": "Policyholder's driver's license number"
+        }
+      ],
+      "validations": [
+        "FullName must be a valid legal name",
+        "DateOfBirth must be a valid date in the past",
+        "Address must be a valid residential address",
+        "PhoneNumber must be a valid phone number",
+        "DriversLicenseNumber must be a valid, registered driver's license number"
+      ]
+    }
+  ],
+  "data_requirements": {
+    "entities": [
+      {
+        "name": "Policyholder",
+        "fields": [
+          "FullName",
+          "DateOfBirth",
+          "Address",
+          "PhoneNumber",
+          "DriversLicenseNumber"
+        ]
+      },
+      {
+        "name": "InsurancePolicy",
+        "fields": [
+          "PolicyNumber",
+          "CoverageType",
+          "CoverageLimit",
+          "Deductible"
+        ]
+      },
+      {
+        "name": "Claim",
+        "fields": [
+          "ClaimNumber",
+          "IncidentDate",
+          "IncidentLocation",
+          "IncidentDescription",
+          "SupportingDocuments"
+        ]
+      }
+    ]
+  },
+  "business_rules": [
+    "Policyholders must be able to access and manage their own insurance policy details",
+    "Policyholders must be able to submit first notice of loss (FNOL) for claims",
+    "Policyholders must be able to upload supporting documents for their claims",
+    "Policyholders must be able to manage their personal information, including contact details and driver's license information"
+  ],
+  "non_functional_requirements": [
+    {
+      "category": "Accessibility",
+      "requirements": [
+        "The application must meet WCAG AA accessibility standards, including support for keyboard navigation and screen readers",
+        "Error messages and form validations must be accessible and provide clear guidance to users"
+      ]
+    },
+    {
+      "category": "Security",
+      "requirements": [
+        "The application must support multi-factor authentication (MFA) for user sign-in",
+        "User sessions must be automatically timed out after a period of inactivity",
+        "All data must be encrypted in transit and at rest",
+        "Audit logging must be implemented for security-related events (e.g., sign-in, password reset)"
+      ]
+    },
+    {
+      "category": "Performance",
+      "requirements": [
+        "The application must be responsive and load quickly, with a target page load time of less than 2 seconds",
+        "The application must be able to handle at least 1,000 concurrent user sessions without degradation in performance"
+      ]
+    },
+    {
+      "category": "Availability",
+      "requirements": [
+        "The application must be available 24/7, with a target uptime of at least 99.9%",
+        "The application must have a robust disaster recovery plan to ensure business continuity in the event of a major outage"
+      ]
+    }
+  ],
+  "end_to_end_workflows": [
+    {
+      "name": "User Authentication",
+      "steps": [
+        "User navigates to the login page",
+        "User enters email and password",
+        "System validates credentials and initiates user session",
+        "User is redirected to the dashboard"
+      ]
+    },
+    {
+      "name": "File a Claim",
+      "steps": [
+        "User navigates to the claims submission page",
+        "User provides incident details (date, location, description)",
+        "User uploads supporting documents (photos, police report)",
+        "System generates a unique claim number and confirms submission"
+      ]
+    },
+    {
+      "name": "Update Personal Information",
+      "steps": [
+        "User navigates to the personal information management page",
+        "User updates their contact information (address, phone number)",
+        "User updates their driver's license information",
+        "System validates the new information and confirms the updates"
+      ]
+    }
+  ],
+  "assumptions_and_dependencies": {
+    "assumptions": [
+      "Policyholders will have a valid email address and password to authenticate",
+      "Policyholders will have access to the required documents (e.g., proof-of-insurance, police report) to submit claims",
+      "The insurance company's backend systems can provide the necessary policy and claims data to populate the portal"
+    ],
+    "dependencies": [
+      "Integration with the insurance company's core policy administration and claims management systems",
+      "Availability of a secure document storage solution to host uploaded claim documents",
+      "Smooth integration with existing claims and CRM processes"
+    ],
+    "open_questions": [
+      "What are the specific requirements for the proof-of-insurance document (e.g., layout, branding)?",
+      "How will the portal handle cases where policyholders forget their password or need to reset it?",
+      "What are the specific data retention and disposal policies for user and claims data?"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+Stitch project ID: projects/10817059263941828609
+Screen IDs: 6e6610e384ef4f58804300f07e7bf582, dbb1e885dabb4a5daa3cf1bc1edd903a, 43901c5d01af4181a6005897aab5eb8b, e1d6dd028e754c0885ce79d1e907947a
+
+Screens:
+- projects/10817059263941828609/screens/6e6610e384ef4f58804300f07e7bf582
+  id: 6e6610e384ef4f58804300f07e7bf582
+- projects/10817059263941828609/screens/dbb1e885dabb4a5daa3cf1bc1edd903a
+  id: dbb1e885dabb4a5daa3cf1bc1edd903a
+- projects/10817059263941828609/screens/43901c5d01af4181a6005897aab5eb8b
+  id: 43901c5d01af4181a6005897aab5eb8b
+- projects/10817059263941828609/screens/e1d6dd028e754c0885ce79d1e907947a
+  id: e1d6dd028e754c0885ce79d1e907947a
+
+Exported mockups:
+- screen_id=6e6610e384ef4f58804300f07e7bf582, s3_key=prd-sessions/PRD-12/wireframes/screens/6e6610e384ef4f58804300f07e7bf582/htmlCode_0.html, mimeType=text/html
+- screen_id=dbb1e885dabb4a5daa3cf1bc1edd903a, s3_key=prd-sessions/PRD-12/wireframes/screens/dbb1e885dabb4a5daa3cf1bc1edd903a/htmlCode_0.html, mimeType=text/html
+- screen_id=43901c5d01af4181a6005897aab5eb8b, s3_key=prd-sessions/PRD-12/wireframes/screens/43901c5d01af4181a6005897aab5eb8b/htmlCode_0.html, mimeType=text/html
+- screen_id=e1d6dd028e754c0885ce79d1e907947a, s3_key=prd-sessions/PRD-12/wireframes/screens/e1d6dd028e754c0885ce79d1e907947a/htmlCode_0.html, mimeType=text/html
+
+Last Stitch result summary:
+- projectId: 10817059263941828609
