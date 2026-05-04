@@ -9,12 +9,14 @@
     "node": ">=18"
   },
   "devDependencies": {
+    "concurrently": "^9.1.2",
     "husky": "^9.1.6",
     "lint-staged": "^15.2.9",
     "prettier": "^3.3.3"
   },
   "scripts": {
     "prepare": "husky",
+    "dev": "concurrently -n server,client -c blue,green \"npm -w server run dev\" \"npm -w client run dev\"",
     "lint": "npm -w client run lint && npm -w server run lint",
     "build": "npm -w client run build && npm -w server run build",
     "test": "npm -w client run test && npm -w server run test"

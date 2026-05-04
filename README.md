@@ -17,6 +17,12 @@ npm install
 
 ## Run (dev)
 
+### Both (recommended)
+
+```bash
+npm run dev
+```
+
 ### Server
 
 ```bash
@@ -36,4 +42,3 @@ npm run lint
 npm run test
 npm run build
 ```
-

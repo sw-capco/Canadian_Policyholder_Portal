@@ -5,7 +5,9 @@ import { api } from '../utils/api.js';
 import { setAuthToken, setAuthUser } from '../utils/auth.js';
 
 function isValidEmail(email) {
-  return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email);
+  const value = String(email || '').trim();
+  // Keep validation intentionally simple: allow most RFC-ish emails and reject obvious typos/whitespace.
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
 export default function SignIn() {
@@ -30,11 +32,12 @@ export default function SignIn() {
     e.preventDefault();
     setFormError('');
     setTouched({ email: true, password: true });
-    if (!isValidEmail(email) || password.length < 8) return;
+    const normalizedEmail = String(email || '').trim();
+    if (!isValidEmail(normalizedEmail) || password.length < 8) return;
 
     setSubmitting(true);
     try {
-      const res = await api.post('/api/auth/signin', { email, password });
+      const res = await api.post('/api/auth/signin', { email: normalizedEmail, password });
       if (res.data?.mfa_required) {
         setMfaState({ mfaToken: res.data.mfa_token, user: res.data.user });
         return;
@@ -137,4 +140,3 @@ export default function SignIn() {
     </div>
   );
 }
-

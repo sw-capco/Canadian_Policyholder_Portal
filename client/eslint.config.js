@@ -11,6 +11,9 @@ export default [
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
+      parserOptions: {
+        ecmaFeatures: { jsx: true },
+      },
       globals: {
         window: 'readonly',
         document: 'readonly',
@@ -27,13 +30,14 @@ export default [
       react: { version: 'detect' },
     },
     rules: {
+      'react/jsx-uses-vars': 'error',
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
       'import/no-unresolved': 'off',
       'jsx-a11y/label-has-associated-control': 'warn',
+      'no-unused-vars': ['error', { varsIgnorePattern: '^React$' }],
     },
   },
 ];
-

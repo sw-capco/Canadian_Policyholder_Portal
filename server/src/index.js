@@ -23,7 +23,6 @@ app.use('/api/policies', policiesRouter);
 const port = Number(process.env.PORT || 5000);
 if (process.env.NODE_ENV !== 'test' && process.env.VITEST !== 'true') {
   app.listen(port, () => {
-    // eslint-disable-next-line no-console
     console.log(`API listening on http://localhost:${port}`);
   });
 }
