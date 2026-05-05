@@ -4,6 +4,10 @@ export const scenarios = {
     mfaUser: { email: 'mfa@example.com', password: 'password123', mfaCode: '123456' },
     multiPolicyUser: { email: 'multi@example.com', password: 'password123' },
     expiredPolicyUser: { email: 'expired@example.com', password: 'password123' },
+    testerUser: { email: 'jordan.tester@example.com', password: 'password123' },
+    ottawaUser: { email: 'sasha.policy@example.com', password: 'password123' },
+    quebecUser: { email: 'quebec.user@example.com', password: 'password123' },
+    demoUser: { email: 'demo.user@example.com', password: 'password123' },
   },
   policies: {
     owned: 'POL123456',
@@ -36,4 +40,3 @@ export const scenarios = {
     invalidPhone: { phoneNumber: 'not-a-phone' },
   },
 };
-
