@@ -1,30 +1,36 @@
 import express from 'express';
 import requireAuth from '../middleware/requireAuth.js';
+import { findPolicy, listUserPolicyNumbers } from '../mock/data.js';
+import { generateProofPdf } from '../services/pdfGenerator.js';
 
 const router = express.Router();
 
 router.get('/:policyNumber', requireAuth, (req, res) => {
   const { policyNumber } = req.params;
-  return res.json({
-    policyNumber,
-    coverageType: 'Comprehensive',
-    coverageLimit: 1000000,
-    deductible: 500,
-    effectiveDate: '2024-01-01',
-    expiryDate: '2025-01-01',
-  });
+  const userPolicies = listUserPolicyNumbers(req.user?.sub);
+  if (!userPolicies.includes(policyNumber)) {
+    return res.status(403).json({ success: false, error: 'Not authorized to access this policy' });
+  }
+
+  const policy = findPolicy(policyNumber);
+  if (!policy) return res.status(404).json({ success: false, error: 'Policy not found' });
+  return res.json(policy);
 });
 
 router.get('/:policyNumber/proof', requireAuth, (req, res) => {
   const { policyNumber } = req.params;
-  const pdfBytes = Buffer.from(
-    `%PDF-1.4\n1 0 obj<<>>endobj\ntrailer<<>>\n%%EOF\n`,
-    'utf8',
-  );
+  const userPolicies = listUserPolicyNumbers(req.user?.sub);
+  if (!userPolicies.includes(policyNumber)) {
+    return res.status(403).json({ success: false, error: 'Not authorized to access this policy' });
+  }
+
+  const policy = findPolicy(policyNumber);
+  if (!policy) return res.status(404).json({ success: false, error: 'Policy not found' });
+
+  const pdfBytes = generateProofPdf(policy);
   res.setHeader('Content-Type', 'application/pdf');
   res.setHeader('Content-Disposition', `attachment; filename="proof-of-insurance-${policyNumber}.pdf"`);
   res.send(pdfBytes);
 });
 
 export default router;
-

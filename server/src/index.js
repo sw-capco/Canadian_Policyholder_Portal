@@ -4,7 +4,9 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import authRouter from './routes/auth.js';
+import claimsRouter from './routes/claims.js';
 import policiesRouter from './routes/policies.js';
+import usersRouter from './routes/users.js';
 
 const app = express();
 
@@ -18,10 +20,13 @@ app.use(express.json());
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
 app.use('/api/auth', authRouter);
+app.use('/api/claims', claimsRouter);
 app.use('/api/policies', policiesRouter);
+app.use('/api/users', usersRouter);
 
 const port = Number(process.env.PORT || 5000);
-if (process.env.NODE_ENV !== 'test' && process.env.VITEST !== 'true') {
+const isTestEnv = process.env.NODE_ENV === 'test' || Boolean(process.env.VITEST);
+if (!isTestEnv) {
   app.listen(port, () => {
     console.log(`API listening on http://localhost:${port}`);
   });
