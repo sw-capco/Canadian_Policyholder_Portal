@@ -32,7 +32,7 @@ const USERS = [
     address: '789 Pine Ave, Mississauga ON',
     phoneNumber: '+1-905-555-0199',
     driversLicenseNumber: 'D3234-56789-12345',
-    policyNumbers: ['POL123456', 'POL999999'],
+    policyNumbers: ['POL123456', 'POL999999', 'POLMISSING'],
     mfaEnabled: false,
   },
   {
