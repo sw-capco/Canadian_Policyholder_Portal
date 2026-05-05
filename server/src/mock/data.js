@@ -1,0 +1,125 @@
+const USERS = [
+  {
+    id: 'u1',
+    email: 'policyholder@example.com',
+    password: 'password123',
+    fullName: 'Alex Policyholder',
+    dateOfBirth: '1980-05-15',
+    address: '123 Maple St, Toronto ON',
+    phoneNumber: '+1-416-555-0100',
+    driversLicenseNumber: 'D1234-56789-12345',
+    policyNumbers: ['POL123456'],
+    mfaEnabled: false,
+  },
+  {
+    id: 'u2',
+    email: 'mfa@example.com',
+    password: 'password123',
+    fullName: 'Morgan MFA',
+    dateOfBirth: '1990-10-02',
+    address: '456 Oak St, Ottawa ON',
+    phoneNumber: '+1-613-555-0133',
+    driversLicenseNumber: 'D2234-56789-12345',
+    policyNumbers: ['POL123456'],
+    mfaEnabled: true,
+  },
+  {
+    id: 'u3',
+    email: 'multi@example.com',
+    password: 'password123',
+    fullName: 'Casey Multi Policy',
+    dateOfBirth: '1975-03-28',
+    address: '789 Pine Ave, Mississauga ON',
+    phoneNumber: '+1-905-555-0199',
+    driversLicenseNumber: 'D3234-56789-12345',
+    policyNumbers: ['POL123456', 'POL999999'],
+    mfaEnabled: false,
+  },
+  {
+    id: 'u4',
+    email: 'expired@example.com',
+    password: 'password123',
+    fullName: 'Evan Expired',
+    dateOfBirth: '1988-08-08',
+    address: '12 Cedar Rd, Hamilton ON',
+    phoneNumber: '+1-289-555-0123',
+    driversLicenseNumber: 'D4234-56789-12345',
+    policyNumbers: ['POLEXPIRED'],
+    mfaEnabled: false,
+  },
+];
+
+const POLICIES = [
+  {
+    policyNumber: 'POL123456',
+    coverageType: 'Comprehensive',
+    coverageLimit: 1000000,
+    deductible: 500,
+    effectiveDate: '2024-01-01',
+    expiryDate: '2025-01-01',
+    vehicles: [{ make: 'Toyota', model: 'Camry', year: 2022, vin: '1HGCM82633A123456' }],
+  },
+  {
+    policyNumber: 'POL999999',
+    coverageType: 'Third Party Liability',
+    coverageLimit: 2000000,
+    deductible: 1000,
+    effectiveDate: '2024-06-01',
+    expiryDate: '2025-06-01',
+    vehicles: [{ make: 'Honda', model: 'Civic', year: 2021, vin: '2HGCM82633A123456' }],
+  },
+  {
+    policyNumber: 'POLEXPIRED',
+    coverageType: 'Comprehensive',
+    coverageLimit: 1000000,
+    deductible: 500,
+    effectiveDate: '2023-01-01',
+    expiryDate: '2024-01-01',
+    vehicles: [{ make: 'Subaru', model: 'Outback', year: 2020, vin: '3HGCM82633A123456' }],
+  },
+];
+
+export function findUserByEmail(email) {
+  const normalized = String(email || '').toLowerCase();
+  return USERS.find((u) => u.email.toLowerCase() === normalized);
+}
+
+export function findUserById(id) {
+  return USERS.find((u) => u.id === id);
+}
+
+export function updateUserPassword(userId, nextPassword) {
+  const user = findUserById(userId);
+  if (!user) return null;
+  user.password = nextPassword;
+  return user;
+}
+
+export function updateUserProfile(userId, patch) {
+  const user = findUserById(userId);
+  if (!user) return null;
+  const allowed = ['address', 'phoneNumber', 'driversLicenseNumber', 'fullName'];
+  for (const key of allowed) {
+    if (Object.prototype.hasOwnProperty.call(patch, key)) user[key] = patch[key];
+  }
+  return user;
+}
+
+export function listUserPolicyNumbers(userId) {
+  const user = findUserById(userId);
+  return user?.policyNumbers ?? [];
+}
+
+export function findPolicy(policyNumber) {
+  return POLICIES.find((p) => p.policyNumber === policyNumber);
+}
+
+export function toSafeUser(user) {
+  return {
+    id: user.id,
+    email: user.email,
+    fullName: user.fullName,
+    policyNumber: user.policyNumbers?.[0],
+    policyNumbers: user.policyNumbers,
+  };
+}

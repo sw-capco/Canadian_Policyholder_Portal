@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { saveAs } from 'file-saver';
+import { Link, useNavigate } from 'react-router-dom';
 import PolicyCard from '../components/PolicyCard.jsx';
 import { api } from '../utils/api.js';
-import { getAuthUser } from '../utils/auth.js';
+import { clearAuth, getAuthUser } from '../utils/auth.js';
 
 function usePolicyNumber() {
   const user = getAuthUser();
@@ -10,6 +11,7 @@ function usePolicyNumber() {
 }
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const policyNumber = usePolicyNumber();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -43,6 +45,11 @@ export default function Dashboard() {
     saveAs(res.data, `proof-of-insurance-${p.policyNumber}.pdf`);
   }
 
+  function handleSignOut() {
+    clearAuth();
+    navigate('/signin', { replace: true });
+  }
+
   return (
     <div className="page" style={{ placeItems: 'start center' }}>
       <div className="dashboard">
@@ -50,6 +57,14 @@ export default function Dashboard() {
           <div>
             <h1 style={{ margin: 0 }}>Dashboard</h1>
             <div style={{ color: 'var(--muted)', fontSize: 14 }}>Your policy summary and quick actions</div>
+          </div>
+          <div className="actions" style={{ margin: 0 }}>
+            <Link className="btn btnSecondary" to="/profile">
+              My Profile
+            </Link>
+            <button type="button" className="btn btnSecondary" onClick={handleSignOut}>
+              Sign out
+            </button>
           </div>
         </div>
 
@@ -83,4 +98,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
