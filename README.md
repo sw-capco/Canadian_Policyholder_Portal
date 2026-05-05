@@ -1,13 +1,24 @@
 # Canadian Policyholder Portal
 
+Self-service portal for Canadian auto insurance policyholders to manage their accounts and claims.
+
+This repo is a **local demo** implementation (no database) with **mock/in-memory data**.
+
+## Tech stack
+
+- Frontend: React + Vite + React Router
+- Backend: Node.js + Express (JSON API)
+- Testing: Vitest (client + server)
+- Lint/format: ESLint + Prettier
+
+## Repository layout
+
 Monorepo with:
 
 - `client/`: React (Vite) frontend (port 3000)
 - `server/`: Express.js backend API (port 5000)
 
 ## Current application state (demo)
-
-The repo currently runs as a **fully local demo** (no database) with **mock/in-memory data**.
 
 Implemented user-facing flows:
 
@@ -34,7 +45,7 @@ Demo login accounts (sample usernames):
 - `multi@example.com` / `password123` (multiple policies)
 - `expired@example.com` / `password123` (policy `POLEXPIRED`)
 
-## Prereqs
+## Prerequisites
 
 - Node.js 18+
 
@@ -43,6 +54,12 @@ Demo login accounts (sample usernames):
 ```bash
 npm install
 ```
+
+### Environment variables
+
+- Root: `./.env.example`
+- Server: `./server/.env.example`
+- Client: `./client/.env.example`
 
 ## Run (dev)
 
@@ -71,3 +88,23 @@ npm run lint
 npm run test
 npm run build
 ```
+
+## Contributing
+
+- Keep changes focused and avoid unrelated refactors.
+- Run `npm run lint` and `npm run test` before opening a PR.
+- Do not commit secrets (API keys, tokens, credentials).
+
+## License
+
+No license file is currently provided in this repository. If a license is required, add a `LICENSE` file at the repo root and update this section.
+
+## Links
+
+- React: https://react.dev/
+- Vite: https://vitejs.dev/
+- React Router: https://reactrouter.com/
+- Express: https://expressjs.com/
+- Vitest: https://vitest.dev/
+- ESLint: https://eslint.org/
+- Prettier: https://prettier.io/
