@@ -1,30 +1,35 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { saveAs } from 'file-saver';
 import { Link, useNavigate } from 'react-router-dom';
 import PolicyCard from '../components/PolicyCard.jsx';
 import { api } from '../utils/api.js';
 import { clearAuth, getAuthUser } from '../utils/auth.js';
 
-function usePolicyNumber() {
+function usePolicyNumbers() {
   const user = getAuthUser();
-  return user?.policyNumber || 'POL123456';
+  const list = Array.isArray(user?.policyNumbers) ? user.policyNumbers : [];
+  if (list.length) return list;
+  if (user?.policyNumber) return [user.policyNumber];
+  return ['POL123456'];
 }
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const policyNumber = usePolicyNumber();
+  const policyNumbers = usePolicyNumbers();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [policy, setPolicy] = useState(null);
+  const [policies, setPolicies] = useState([]);
 
-  const policies = useMemo(() => (policy ? [policy] : []), [policy]);
-
-  async function fetchPolicy() {
+  async function fetchPolicies() {
     setLoading(true);
     setError('');
     try {
-      const res = await api.get(`/api/policies/${encodeURIComponent(policyNumber)}`);
-      setPolicy(res.data);
+      const results = await Promise.all(
+        policyNumbers.map((policyNumber) =>
+          api.get(`/api/policies/${encodeURIComponent(policyNumber)}`).then((res) => res.data),
+        ),
+      );
+      setPolicies(results);
     } catch (err) {
       const message = err?.response?.data?.error || 'Unable to load policy details.';
       setError(message);
@@ -34,9 +39,9 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-    fetchPolicy();
+    fetchPolicies();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [policyNumber]);
+  }, [policyNumbers.join('|')]);
 
   async function handleDownloadProof(p) {
     const res = await api.get(`/api/policies/${encodeURIComponent(p.policyNumber)}/proof`, {
@@ -81,7 +86,7 @@ export default function Dashboard() {
         {error ? (
           <div role="alert" aria-live="polite" style={{ marginTop: 12 }}>
             <div className="error">{error}</div>
-            <button type="button" className="btn btnSecondary" style={{ marginTop: 8 }} onClick={fetchPolicy}>
+            <button type="button" className="btn btnSecondary" style={{ marginTop: 8 }} onClick={fetchPolicies}>
               Retry
             </button>
           </div>
