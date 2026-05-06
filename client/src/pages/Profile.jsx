@@ -61,12 +61,24 @@ export default function Profile() {
     setForm((f) => ({ ...f, [name]: value }));
   }
 
+  function errorId(name) {
+    return `${name}-error`;
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setSaveError('');
     setSaveMessage('');
-    setTouched({ fullName: true, address: true, phoneNumber: true, driversLicenseNumber: true });
-    if (Object.keys(errors).length) return;
+    const nextTouched = { fullName: true, address: true, phoneNumber: true, driversLicenseNumber: true };
+    setTouched(nextTouched);
+    const nextErrors = {};
+    if (!String(form.fullName).trim()) nextErrors.fullName = 'Full name is required.';
+    if (!String(form.address).trim()) nextErrors.address = 'Address is required.';
+    if (!isValidCanadianPhone(form.phoneNumber)) nextErrors.phoneNumber = 'Enter a valid phone number.';
+    if (!isValidDriversLicense(form.driversLicenseNumber)) {
+      nextErrors.driversLicenseNumber = 'Enter a valid driver’s license number.';
+    }
+    if (Object.keys(nextErrors).length) return;
 
     setSaving(true);
     try {
@@ -120,11 +132,13 @@ export default function Profile() {
                     id="fullName"
                     className="input"
                     value={form.fullName}
+                    aria-invalid={Boolean(errors.fullName)}
+                    aria-describedby={errors.fullName ? errorId('fullName') : undefined}
                     onBlur={() => setTouched((t) => ({ ...t, fullName: true }))}
                     onChange={(e) => setField('fullName', e.target.value)}
                   />
                   {errors.fullName ? (
-                    <div className="error" role="alert" aria-live="polite">
+                    <div id={errorId('fullName')} className="error" role="alert" aria-live="polite">
                       {errors.fullName}
                     </div>
                   ) : null}
@@ -138,11 +152,13 @@ export default function Profile() {
                     id="address"
                     className="input"
                     value={form.address}
+                    aria-invalid={Boolean(errors.address)}
+                    aria-describedby={errors.address ? errorId('address') : undefined}
                     onBlur={() => setTouched((t) => ({ ...t, address: true }))}
                     onChange={(e) => setField('address', e.target.value)}
                   />
                   {errors.address ? (
-                    <div className="error" role="alert" aria-live="polite">
+                    <div id={errorId('address')} className="error" role="alert" aria-live="polite">
                       {errors.address}
                     </div>
                   ) : null}
@@ -157,11 +173,13 @@ export default function Profile() {
                     className="input"
                     value={form.phoneNumber}
                     inputMode="tel"
+                    aria-invalid={Boolean(errors.phoneNumber)}
+                    aria-describedby={errors.phoneNumber ? errorId('phoneNumber') : undefined}
                     onBlur={() => setTouched((t) => ({ ...t, phoneNumber: true }))}
                     onChange={(e) => setField('phoneNumber', e.target.value)}
                   />
                   {errors.phoneNumber ? (
-                    <div className="error" role="alert" aria-live="polite">
+                    <div id={errorId('phoneNumber')} className="error" role="alert" aria-live="polite">
                       {errors.phoneNumber}
                     </div>
                   ) : null}
@@ -175,11 +193,13 @@ export default function Profile() {
                     id="driversLicenseNumber"
                     className="input"
                     value={form.driversLicenseNumber}
+                    aria-invalid={Boolean(errors.driversLicenseNumber)}
+                    aria-describedby={errors.driversLicenseNumber ? errorId('driversLicenseNumber') : undefined}
                     onBlur={() => setTouched((t) => ({ ...t, driversLicenseNumber: true }))}
                     onChange={(e) => setField('driversLicenseNumber', e.target.value)}
                   />
                   {errors.driversLicenseNumber ? (
-                    <div className="error" role="alert" aria-live="polite">
+                    <div id={errorId('driversLicenseNumber')} className="error" role="alert" aria-live="polite">
                       {errors.driversLicenseNumber}
                     </div>
                   ) : null}
@@ -212,4 +232,3 @@ export default function Profile() {
     </div>
   );
 }
-

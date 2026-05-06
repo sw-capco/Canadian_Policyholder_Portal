@@ -38,4 +38,25 @@ describe('policies routes', () => {
     });
     expect(res.status).toBe(403);
   });
+
+  it('returns proof-of-insurance PDF for owned policy', async () => {
+    const signin = await testRequest(app, {
+      method: 'POST',
+      url: '/api/auth/signin',
+      body: { email: 'policyholder@example.com', password: 'password123' },
+    });
+    const token = signin.body.token;
+
+    const res = await testRequest(app, {
+      method: 'GET',
+      url: '/api/policies/POL123456/proof',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    expect(res.status).toBe(200);
+    expect(String(res.headers['content-type'] || '')).toContain('application/pdf');
+    expect(res.rawBody.startsWith('%PDF-1.4')).toBe(true);
+    expect(res.rawBody).toContain('PROOF OF INSURANCE');
+    expect(res.rawBody).toContain('POL123456');
+  });
 });

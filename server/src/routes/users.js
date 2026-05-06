@@ -11,9 +11,15 @@ function isValidCanadianPhone(value) {
 }
 
 function isValidDriversLicense(value) {
-  // Demo validator: allow alphanumerics and dashes 8-20 chars.
   const v = String(value || '').trim();
-  return /^[A-Za-z0-9-]{8,20}$/.test(v);
+  // Dependency-free demo validation for common provincial patterns.
+  // Ontario: A1234-56789-12345 (1 letter + 14 digits; dashes optional)
+  // Quebec: TREM12345678 (4 letters + 8 digits)
+  // British Columbia: 7 digits
+  const on = /^[A-Za-z]\d{4}[- ]?\d{5}[- ]?\d{5}$/.test(v);
+  const qc = /^[A-Za-z]{4}\d{8}$/.test(v);
+  const bc = /^\d{7}$/.test(v);
+  return on || qc || bc;
 }
 
 router.get('/profile', requireAuth, (req, res) => {
@@ -30,6 +36,12 @@ router.get('/profile', requireAuth, (req, res) => {
 
 router.put('/profile', requireAuth, (req, res) => {
   const patch = req.body || {};
+  if (Object.prototype.hasOwnProperty.call(patch, 'fullName') && !String(patch.fullName || '').trim()) {
+    return res.status(422).json({ success: false, error: 'fullName is required' });
+  }
+  if (Object.prototype.hasOwnProperty.call(patch, 'address') && !String(patch.address || '').trim()) {
+    return res.status(422).json({ success: false, error: 'address is required' });
+  }
   if (Object.prototype.hasOwnProperty.call(patch, 'phoneNumber') && !isValidCanadianPhone(patch.phoneNumber)) {
     return res.status(422).json({ success: false, error: 'phoneNumber is invalid' });
   }
@@ -46,4 +58,3 @@ router.put('/profile', requireAuth, (req, res) => {
 });
 
 export default router;
-

@@ -20,6 +20,10 @@ export default function ChangePassword() {
     return next;
   }, [currentPassword, newPassword, touched]);
 
+  function errorId(name) {
+    return `${name}-error`;
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setMessage('');
@@ -57,12 +61,14 @@ export default function ChangePassword() {
           type="password"
           autoComplete="current-password"
           aria-label="Current password"
+          aria-invalid={Boolean(errors.currentPassword)}
+          aria-describedby={errors.currentPassword ? errorId('currentPassword') : undefined}
           value={currentPassword}
           onBlur={() => setTouched((t) => ({ ...t, currentPassword: true }))}
           onChange={(e) => setCurrentPassword(e.target.value)}
         />
         {errors.currentPassword ? (
-          <div className="error" role="alert" aria-live="polite">
+          <div id={errorId('currentPassword')} className="error" role="alert" aria-live="polite">
             {errors.currentPassword}
           </div>
         ) : null}
@@ -78,12 +84,14 @@ export default function ChangePassword() {
           type="password"
           autoComplete="new-password"
           aria-label="New password"
+          aria-invalid={Boolean(errors.newPassword)}
+          aria-describedby={errors.newPassword ? errorId('newPassword') : undefined}
           value={newPassword}
           onBlur={() => setTouched((t) => ({ ...t, newPassword: true }))}
           onChange={(e) => setNewPassword(e.target.value)}
         />
         {errors.newPassword ? (
-          <div className="error" role="alert" aria-live="polite">
+          <div id={errorId('newPassword')} className="error" role="alert" aria-live="polite">
             {errors.newPassword}
           </div>
         ) : null}
@@ -106,4 +114,3 @@ export default function ChangePassword() {
     </form>
   );
 }
-
